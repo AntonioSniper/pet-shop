@@ -1,0 +1,4 @@
+{
+  "driver": "sqlite",
+  "database_path": "../database/database.sqlite"
+}
