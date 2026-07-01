@@ -1,39 +1,19 @@
-FROM php:8.2-apache
+FROM php:8.3-cli
 
-# Установка системных зависимостей
 RUN apt-get update && apt-get install -y \
-    git \
-    curl \
-    libpng-dev \
-    libonig-dev \
-    libxml2-dev \
-    zip \
-    unzip \
-    nodejs \
-    npm
+    git unzip libzip-dev libpng-dev libjpeg-dev libfreetype6-dev \
+    && docker-php-ext-install pdo pdo_mysql zip
 
-# Установка Composer
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-# Включение mod_rewrite для Apache
-RUN a2enmod rewrite
+WORKDIR /app
 
-# Копирование всех файлов проекта
-COPY . /var/www/html
+COPY . .
 
-# Установка прав на папки storage и bootstrap/cache
-RUN chown -R www-data:www-data /var/www/html \
-    && chmod -R 755 /var/www/html/storage \
-    && chmod -R 755 /var/www/html/bootstrap/cache
-
-# Установка зависимостей PHP
 RUN composer install --no-dev --optimize-autoloader
 
-# Установка зависимостей Node.js и сборка фронтенда (если есть)
-RUN npm install && npm run build || true
+RUN php artisan config:clear
 
-# Открываем порт 80
-EXPOSE 80
+EXPOSE 8000
 
-# Запуск Apache
-CMD ["apache2-foreground"]
+CMD php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=${PORT:-8000}
