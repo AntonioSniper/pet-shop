@@ -16,7 +16,7 @@
             <section class="shop-card shop-detail">
                 <div>
                     <img
-                        src="{{ $product->image ? (\Illuminate\Support\Str::startsWith($product->image, ['http://', 'https://', '/']) ? $product->image : asset('storage/' . $product->image)) : asset('images/dogtoy.jpg') }}"
+                        src="{{ $product->image ? (\Illuminate\Support\Str::startsWith($product->image, ['http://', 'https://', '/']) ? $product->image : asset($product->image)) : asset('images/dogtoy.jpg') }}"
                         alt="{{ $product->name }}"
                         class="shop-detail-image"
                     >

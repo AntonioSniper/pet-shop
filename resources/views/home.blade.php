@@ -64,31 +64,43 @@
                 <div class="shop-grid">
                     @forelse($filteredProducts as $product)
                         <article class="shop-card shop-product-card">
+
                             <img
-                                src="{{ $product->image ? (\Illuminate\Support\Str::startsWith($product->image, ['http://', 'https://', '/']) ? $product->image : asset('storage/' . $product->image)) : asset('images/dogtoy.jpg') }}"
+                                src="{{ asset($product->image ?: 'images/dogtoy.jpg') }}"
                                 alt="{{ $product->name }}"
                                 class="shop-product-image"
                             >
 
                             <div class="shop-product-body">
                                 <h3 class="shop-product-title">{{ $product->name }}</h3>
-                                <p class="shop-product-meta">Категория: {{ $product->category->name ?? 'Без категории' }}</p>
+
+                                <p class="shop-product-meta">
+                                    Категория: {{ $product->category->name ?? 'Без категории' }}
+                                </p>
+
                                 <p class="shop-product-description">
                                     {{ \Illuminate\Support\Str::limit($product->description ?: 'Описание товара скоро появится.', 115) }}
                                 </p>
 
                                 <div class="shop-spacer"></div>
 
-                                <p class="shop-price">{{ number_format($product->price, 2, ',', ' ') }} ₽</p>
+                                <p class="shop-price">
+                                    {{ number_format($product->price, 2, ',', ' ') }} ₽
+                                </p>
 
                                 @if($product->stock > 0)
-                                    <span class="shop-badge shop-badge-success">В наличии: {{ $product->stock }}</span>
+                                    <span class="shop-badge shop-badge-success">
+                                        В наличии: {{ $product->stock }}
+                                    </span>
                                 @else
-                                    <span class="shop-badge shop-badge-danger">Нет в наличии</span>
+                                    <span class="shop-badge shop-badge-danger">
+                                        Нет в наличии
+                                    </span>
                                 @endif
 
                                 <div class="shop-actions" style="margin-top:16px;">
-                                    <a href="{{ route('products.show', $product) }}" class="shop-btn shop-btn-primary shop-btn-block">
+                                    <a href="{{ route('products.show', $product) }}"
+                                       class="shop-btn shop-btn-primary shop-btn-block">
                                         Подробнее
                                     </a>
                                 </div>
@@ -97,8 +109,12 @@
                     @empty
                         <div class="shop-card shop-empty">
                             <h3>Товары не найдены</h3>
-                            <p class="shop-muted">Попробуйте изменить запрос или сбросить фильтр.</p>
-                            <a href="{{ route('home') }}" class="shop-btn shop-btn-primary">Показать весь каталог</a>
+                            <p class="shop-muted">
+                                Попробуйте изменить запрос или сбросить фильтр.
+                            </p>
+                            <a href="{{ route('home') }}" class="shop-btn shop-btn-primary">
+                                Показать весь каталог
+                            </a>
                         </div>
                     @endforelse
                 </div>
